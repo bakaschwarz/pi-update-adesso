@@ -44,4 +44,22 @@ describe("AdessoHubClient", () => {
     const c = new AdessoHubClient(baseUrl, "k", { fetchImpl, timeoutMs: 10 });
     await expect(c.getModelInfo()).rejects.toMatchObject({ code: "timeout" });
   });
+
+  it("sends correct query parameters for getUserDailyActivity", async () => {
+    let capturedUrl: string | null = null;
+    
+    const fetchImpl = async (input: RequestInfo | URL) => {
+      capturedUrl = input.toString();
+      return new Response(JSON.stringify({ metadata: { total_spend: 123.45 } }), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      });
+    };
+
+    const c = new AdessoHubClient(baseUrl, "k", { fetchImpl });
+    await c.getUserDailyActivity("2023-01-01", "2023-01-31");
+    
+    expect(capturedUrl).toContain("start_date=2023-01-01");
+    expect(capturedUrl).toContain("end_date=2023-01-31");
+  });
 });
