@@ -40,13 +40,13 @@ export function mapModels(payload: ModelInfoItem[]): ProviderModels[] {
     const id = m.model_name;
     const name = id;
     const reasoning = !!m.supports_reasoning;
-    const input: PiModel["input"] = ["text", ...(m.supports_vision ? ["image"] : [])];
+    const input: PiModel["input"] = ["text", ...(m.supports_vision ? ["image"] : []) as ("image"|"text")[]];
     const contextWindow = m.max_input_tokens ?? m.max_tokens ?? 128000;
     const maxTokens = m.max_output_tokens ?? m.max_tokens ?? 4096;
 
-    // scale ×1e6 (assume payload in per-token currency; if already micro, no harm for now)
-    const inputCost = Math.round(((m.input_price_micro ?? 0) * 1e6));
-    const outputCost = Math.round(((m.output_price_micro ?? 0) * 1e6));
+    // Values are already in micro-units, no scaling needed
+    const inputCost = Math.round(m.input_price_micro ?? 0);
+    const outputCost = Math.round(m.output_price_micro ?? 0);
 
     const model: PiModel = {
       id,

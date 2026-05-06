@@ -31,7 +31,16 @@ describe("AdessoHubClient", () => {
   });
 
   it("times out", async () => {
-    const fetchImpl = async () => new Promise<Response>(() => {});
+    const fetchImpl = async (_input: RequestInfo | URL, init?: RequestInit) => {
+      return new Promise<Response>((resolve, reject) => {
+        // Listen to abort signal
+        init?.signal?.addEventListener("abort", () => {
+          reject(Object.assign(new Error("The operation was aborted"), { name: "AbortError" }));
+        });
+        
+        // Never resolve otherwise
+      });
+    };
     const c = new AdessoHubClient(baseUrl, "k", { fetchImpl, timeoutMs: 10 });
     await expect(c.getModelInfo()).rejects.toMatchObject({ code: "timeout" });
   });

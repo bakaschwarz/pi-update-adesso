@@ -2,6 +2,8 @@ import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 import { AdessoHubClient } from "./hubClient";
 import { mapModels, dryRunSummary } from "./mapping";
 import { ensureProviders } from "./writer";
+import os from "node:os";
+import path from "node:path";
 
 function requireKey(): string {
   const key = process.env.ADESSO_API_KEY;
@@ -32,9 +34,9 @@ export default function (pi: ExtensionAPI) {
       }
 
       // write
-      const modelsPath = `${process.env.HOME || "~"}/.pi/agent/models.json`;
+      const modelsPath = path.join(os.homedir(), ".pi", "agent", "models.json");
       await ensureProviders(modelsPath, providers);
-      ctx.ui.notify("providers updated", "success");
+      ctx.ui.notify("providers updated", "info");
     },
   });
 

@@ -42,14 +42,6 @@ export async function ensureProviders(modelsPath: string, providerModels: Array<
       authHeader: true,
       models: pm.models, // hard-replace
     };
-
-    // Preserve non-adesso providers implicitly by not touching other keys
-    for (const k of Object.keys(data.providers)) {
-      if (k !== "adesso-openai" && k !== "adesso-anthropic") {
-        // leave as-is
-        data.providers[k] = data.providers[k];
-      }
-    }
   }
 
   // Write pretty

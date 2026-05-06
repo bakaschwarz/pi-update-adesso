@@ -24,6 +24,24 @@ describe("mapping", () => {
     expect(gpt4o.reasoning).toBe(false);
   });
 
+  it("correctly maps cost values without double scaling", () => {
+    const providers = mapModels(sample);
+    const openai = providers.find(p => p.provider === "adesso-openai")!;
+    const anth = providers.find(p => p.provider === "adesso-anthropic")!;
+
+    const gpt4o = openai.models.find(m => m.id === "gpt-4o-mini")!;
+    expect(gpt4o.cost.input).toBe(3);  // input_price_micro: 3 should remain 3
+    expect(gpt4o.cost.output).toBe(15);  // output_price_micro: 15 should remain 15
+
+    const claude = anth.models.find(m => m.id === "claude-3-5-sonnet")!;
+    expect(claude.cost.input).toBe(5);  // input_price_micro: 5 should remain 5
+    expect(claude.cost.output).toBe(15);  // output_price_micro: 15 should remain 15
+
+    const o3mini = openai.models.find(m => m.id === "o3-mini")!;
+    expect(o3mini.cost.input).toBe(2);  // input_price_micro: 2 should remain 2
+    expect(o3mini.cost.output).toBe(10);  // output_price_micro: 10 should remain 10
+  });
+
   it("dry-run summary prints counts and samples", () => {
     const providers = mapModels(sample);
     const s = dryRunSummary(providers);
