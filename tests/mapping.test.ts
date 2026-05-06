@@ -17,12 +17,12 @@ describe("mapping", () => {
     const anth = providers.find(p => p.provider === "adesso-anthropic")!;
 
     const claudeSonnet = anth.models.find(m => m.id === "claude-3-5-sonnet")!;
-    expect(claudeSonnet.cost.cacheRead).toBe(1);  // cache_read_input_token_cost: 0.00000075 should become 1
-    expect(claudeSonnet.cost.cacheWrite).toBe(2);  // cache_creation_input_token_cost: 0.0000015 should become 2
+    expect(claudeSonnet.cost.cacheRead).toBe(0.75);  // cache_read_input_token_cost: 0.00000075 should become 0.75
+    expect(claudeSonnet.cost.cacheWrite).toBe(1.5);  // cache_creation_input_token_cost: 0.0000015 should become 1.5
 
     const claudeHaiku = anth.models.find(m => m.id === "claude-3-haiku")!;
     expect(claudeHaiku.cost.cacheRead).toBe(1);  // cache_read_input_token_cost: 0.000001 should become 1
-    expect(claudeHaiku.cost.cacheWrite).toBe(1);  // cache_creation_input_token_cost_above_200k_tokens: 0.0000005 should become 1
+    expect(claudeHaiku.cost.cacheWrite).toBe(0.5);  // cache_creation_input_token_cost_above_200k_tokens: 0.0000005 should become 0.5
   });
 
   it("maps to providers, excludes embeddings, sets overrides", () => {

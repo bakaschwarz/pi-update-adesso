@@ -52,11 +52,11 @@ export function mapModels(payload: ModelInfoItem[]): ProviderModels[] {
     const contextWindow = m.model_info.max_input_tokens ?? m.model_info.max_tokens ?? 128000;
     const maxTokens = m.model_info.max_output_tokens ?? m.model_info.max_tokens ?? 4096;
 
-    // Values are converted from per-token to per-million-tokens
-    const inputCost = Math.round((m.model_info.input_cost_per_token ?? 0) * 1_000_000);
-    const outputCost = Math.round((m.model_info.output_cost_per_token ?? 0) * 1_000_000);
-    const cacheReadCost = Math.round((m.model_info.cache_read_input_token_cost ?? 0) * 1_000_000);
-    const cacheWriteCost = Math.round(((m.model_info.cache_creation_input_token_cost_above_200k_tokens ?? m.model_info.cache_creation_input_token_cost) ?? 0) * 1_000_000);
+    // Values are converted from per-token to per-million-tokens with 2-decimal precision
+    const inputCost = Math.round((m.model_info.input_cost_per_token ?? 0) * 1_000_000 * 100) / 100;
+    const outputCost = Math.round((m.model_info.output_cost_per_token ?? 0) * 1_000_000 * 100) / 100;
+    const cacheReadCost = Math.round((m.model_info.cache_read_input_token_cost ?? 0) * 1_000_000 * 100) / 100;
+    const cacheWriteCost = Math.round(((m.model_info.cache_creation_input_token_cost_above_200k_tokens ?? m.model_info.cache_creation_input_token_cost) ?? 0) * 1_000_000 * 100) / 100;
 
     const model: PiModel = {
       id,
