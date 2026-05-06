@@ -7,8 +7,8 @@ import path from "node:path";
 describe("/update-adesso e2e (logic units)", () => {
   it("dry-run prints counts and sample ids; real write idempotent", async () => {
     const payload = [
-      { model_name: "gpt-4o-mini", supports_vision: true, mode: "chat" },
-      { model_name: "claude-3-5-sonnet", supports_reasoning: true, supports_vision: true, mode: "chat" },
+      { model_name: "gpt-4o-mini", model_info: { supports_vision: true, mode: "chat" } },
+      { model_name: "claude-3-5-sonnet", model_info: { supports_reasoning: true, supports_vision: true, mode: "chat" } },
     ];
 
     const providers = mapModels(payload as any);

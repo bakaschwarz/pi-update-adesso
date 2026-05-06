@@ -3,11 +3,13 @@ import { mapModels, dryRunSummary, type ModelInfoItem } from "../src/mapping";
 
 describe("mapping", () => {
   const sample: ModelInfoItem[] = [
-    { model_name: "gpt-4o-mini", supports_reasoning: false, supports_vision: true, max_tokens: 100000, mode: "chat", input_cost_per_token: 0.000003, output_cost_per_token: 0.000015 },
-    { model_name: "claude-3-5-sonnet", supports_reasoning: true, supports_vision: true, max_input_tokens: 200000, max_output_tokens: 8000, mode: "chat", input_cost_per_token: 0.000005, output_cost_per_token: 0.000015, cache_read_input_token_cost: 0.00000075, cache_creation_input_token_cost: 0.0000015 },
-    { model_name: "claude-3-haiku", supports_reasoning: false, supports_vision: false, max_input_tokens: 200000, max_output_tokens: 4096, mode: "chat", input_cost_per_token: 0.00000025, output_cost_per_token: 0.00000125, cache_read_input_token_cost: 0.000001, cache_creation_input_token_cost_above_200k_tokens: 0.0000005 },
-    { model_name: "text-embedding-3-small", mode: "embeddings" },
-    { model_name: "o3-mini", supports_reasoning: true, max_tokens: 50000, mode: "responses", input_cost_per_token: 0.000002, output_cost_per_token: 0.000010 },
+    { model_name: "gpt-4o-mini", model_info: { supports_reasoning: false, supports_vision: true, max_tokens: 100000, mode: "chat", input_cost_per_token: 0.000003, output_cost_per_token: 0.000015 } },
+    { model_name: "claude-3-5-sonnet", model_info: { supports_reasoning: true, supports_vision: true, max_input_tokens: 200000, max_output_tokens: 8000, mode: "chat", input_cost_per_token: 0.000005, output_cost_per_token: 0.000015, cache_read_input_token_cost: 0.00000075, cache_creation_input_token_cost: 0.0000015 } },
+    { model_name: "claude-3-haiku", model_info: { supports_reasoning: false, supports_vision: false, max_input_tokens: 200000, max_output_tokens: 4096, mode: "chat", input_cost_per_token: 0.00000025, output_cost_per_token: 0.00000125, cache_read_input_token_cost: 0.000001, cache_creation_input_token_cost_above_200k_tokens: 0.0000005 } },
+    { model_name: "text-embedding-3-small", model_info: { mode: "embeddings" } },
+    { model_name: "o3-mini", model_info: { supports_reasoning: true, max_tokens: 50000, mode: "responses", input_cost_per_token: 0.000002, output_cost_per_token: 0.000010 } },
+    // Model without model_info should be skipped
+    { model_name: "invalid-model" },
   ];
 
   it("correctly maps cache cost values with proper scaling", () => {
