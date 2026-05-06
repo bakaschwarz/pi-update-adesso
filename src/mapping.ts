@@ -6,8 +6,11 @@ export interface ModelInfoItem {
   max_input_tokens?: number;
   max_output_tokens?: number;
   max_tokens?: number;
-  input_price_micro?: number; // per token in currency units → we will scale ×1e6 below if needed
-  output_price_micro?: number;
+  input_cost_per_token?: number; // per token in currency units → we will scale ×1e6 below if needed
+  output_cost_per_token?: number;
+  cache_read_input_token_cost?: number;
+  cache_creation_input_token_cost?: number;
+  cache_creation_input_token_cost_above_200k_tokens?: number;
   mode?: "chat" | "responses" | "embeddings" | string;
 }
 
@@ -44,16 +47,18 @@ export function mapModels(payload: ModelInfoItem[]): ProviderModels[] {
     const contextWindow = m.max_input_tokens ?? m.max_tokens ?? 128000;
     const maxTokens = m.max_output_tokens ?? m.max_tokens ?? 4096;
 
-    // Values are already in micro-units, no scaling needed
-    const inputCost = Math.round(m.input_price_micro ?? 0);
-    const outputCost = Math.round(m.output_price_micro ?? 0);
+    // Values are converted from per-token to per-million-tokens
+    const inputCost = Math.round((m.input_cost_per_token ?? 0) * 1_000_000);
+    const outputCost = Math.round((m.output_cost_per_token ?? 0) * 1_000_000);
+    const cacheReadCost = Math.round((m.cache_read_input_token_cost ?? 0) * 1_000_000);
+    const cacheWriteCost = Math.round(((m.cache_creation_input_token_cost_above_200k_tokens ?? m.cache_creation_input_token_cost) ?? 0) * 1_000_000);
 
     const model: PiModel = {
       id,
       name,
       reasoning,
       input,
-      cost: { input: inputCost, output: outputCost, cacheRead: 0, cacheWrite: 0 },
+      cost: { input: inputCost, output: outputCost, cacheRead: cacheReadCost, cacheWrite: cacheWriteCost },
       contextWindow,
       maxTokens,
     };

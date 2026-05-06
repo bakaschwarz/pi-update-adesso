@@ -32,7 +32,7 @@ export async function ensureProviders(modelsPath: string, providerModels: Array<
     const key = pm.provider;
     const existing = data.providers[key] ?? {} as ProviderConfig;
 
-    const baseUrl = key === "adesso-anthropic" ? "https://adesso-ai-hub.3asabc.de/anthropic" : "https://adesso-ai-hub.3asabc.de/openai";
+    const baseUrl = "https://adesso-ai-hub.3asabc.de";
     const api = key === "adesso-anthropic" ? "anthropic-messages" : "openai-completions";
 
     data.providers[key] = {
