@@ -30,7 +30,6 @@ export async function ensureProviders(modelsPath: string, providerModels: Array<
   // Ensure adesso providers
   for (const pm of providerModels) {
     const key = pm.provider;
-    const existing = data.providers[key] ?? {} as ProviderConfig;
 
     const baseUrl = "https://adesso-ai-hub.3asabc.de";
     const api = key === "adesso-anthropic" ? "anthropic-messages" : "openai-completions";

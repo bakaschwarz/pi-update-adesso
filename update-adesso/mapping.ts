@@ -43,7 +43,7 @@ export function mapModels(payload: ModelInfoItem[]): ProviderModels[] {
         if (!m.model_info) continue;
 
         // Exclude embeddings
-        if (m.model_info.mode === "embedding") continue;
+        if (m.model_info.mode === "embedding" || m.model_info.mode === "embeddings") continue;
 
         const id = m.model_name;
         const name = id;
